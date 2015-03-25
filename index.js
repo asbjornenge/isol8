@@ -1,9 +1,9 @@
-module.exports = transformdeps;
+module.exports = replaceRequire;
 
 var acorn = require('acorn');
-var walk = require('acorn/util/walk');
+var walk  = require('acorn/util/walk');
 
-function transformdeps (src, fn, ignore_trycatch) {
+function replaceRequire(src, fn) {
   var ret = src;
   var ast = acorn.parse(src, { ranges: true });
   var offset = 0;
@@ -11,20 +11,11 @@ function transformdeps (src, fn, ignore_trycatch) {
     CallExpression: function (node, state) {
       if (node.callee.type === 'Identifier' && 
           node.callee.name === 'require' && node.arguments) {
-        if (ignore_trycatch) {
-          var istrycatch = state.some(function (s) {
-            return s.type === 'TryStatement' || s.type === 'CatchClause';
-          });
-          if (istrycatch)
-            return;
-        }
-        var arg0 = node.arguments[0];
-        var value = src.substring(arg0.range[0] + 1, arg0.range[1] - 1);
+        var value = src.substring(node.start, node.end);
         var update = fn(value);
         if (!update || typeof update !== 'string')
           return;
-        ret = ret.substring(0, arg0.range[0] + 1 + offset) + 
-          update + ret.substring(arg0.range[1] - 1 + offset);
+        ret = ret.substring(0, node.start + offset) + update + ret.substring(node.end + offset);
         offset += update.length - value.length;
       }
     }
