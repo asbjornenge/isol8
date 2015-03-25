@@ -1,0 +1,25 @@
+{
+  "name": "isol8",
+  "version": "1.0.0",
+  "description": "Isolate your web components",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha -R nyan -w --check-leaks"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/asbjornenge/isol8.git"
+  },
+  "keywords": [
+    "web",
+    "components",
+    "web-components",
+    "isol8"
+  ],
+  "author": "Asbjorn Enge <asbjorn@hanafjedle.net>",
+  "license": "BSD",
+  "bugs": {
+    "url": "https://github.com/asbjornenge/isol8/issues"
+  },
+  "homepage": "https://github.com/asbjornenge/isol8"
+}
